@@ -3,6 +3,7 @@ package com.sedavnyh.foody.models
 
 import com.google.gson.annotations.SerializedName
 
+// Рецепт по запросу
 data class Result(
     @SerializedName("aggregateLikes")
     val aggregateLikes: Int,

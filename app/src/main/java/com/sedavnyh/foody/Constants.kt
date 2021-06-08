@@ -1,5 +1,6 @@
 package com.sedavnyh.foody
 
+//Константы проекта. Ключ и основной URL
 class Constants {
     companion object{
 

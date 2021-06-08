@@ -3,6 +3,7 @@ package com.sedavnyh.foody.models
 
 import com.google.gson.annotations.SerializedName
 
+//Расширенная информация по ингредиенту
 data class ExtendedIngredient(
     @SerializedName("amount")
     val amount: Double,
