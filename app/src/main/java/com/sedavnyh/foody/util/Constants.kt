@@ -1,4 +1,4 @@
-package com.sedavnyh.foody
+package com.sedavnyh.foody.util
 
 //Константы проекта. Ключ и основной URL
 class Constants {

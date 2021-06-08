@@ -1,11 +1,12 @@
-package com.sedavnyh.foody
+package com.sedavnyh.foody.data
 
+import com.sedavnyh.foody.data.network.FoodRecipesApi
 import com.sedavnyh.foody.models.FoodRecipe
 import retrofit2.Response
 import javax.inject.Inject
 
 
-//По сути репозиторий для получения данных с использованием инжектов и ретрофита
+//По сути репозиторий для получения данных с удаленного сервера м использованием инжектов и ретрофита
 class RemoteDataSource @Inject constructor(
     private val foodRecipesApi: FoodRecipesApi
 ) {

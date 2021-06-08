@@ -1,7 +1,7 @@
 package com.sedavnyh.foody.di
 
-import com.sedavnyh.foody.Constants.Companion.BASE_URL
-import com.sedavnyh.foody.FoodRecipesApi
+import com.sedavnyh.foody.util.Constants.Companion.BASE_URL
+import com.sedavnyh.foody.data.network.FoodRecipesApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
