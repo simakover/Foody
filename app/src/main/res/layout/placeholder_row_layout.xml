@@ -40,8 +40,8 @@
 
     <View
         android:id="@+id/view4"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:background="@color/mediumGray"
@@ -51,8 +51,8 @@
 
     <View
         android:id="@+id/view5"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:background="@color/mediumGray"
         app:layout_constraintStart_toEndOf="@+id/view4"
@@ -60,10 +60,12 @@
 
     <View
         android:id="@+id/view6"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:background="@color/mediumGray"
+        app:layout_constraintEnd_toEndOf="@+id/view3"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/view5"
         app:layout_constraintTop_toTopOf="@+id/view5" />
 
