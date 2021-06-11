@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="result"
             type="com.sedavnyh.foody.models.Result" />
@@ -54,7 +55,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/courgette"
                     android:maxLines="2"
-                    android:text="TextView"
+                    android:text="@{result.title}"
                     android:textColor="@color/darker"
                     android:textSize="20sp"
 
@@ -71,7 +72,7 @@
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:text="TextView"
+                    android:text="@{result.summary}"
                     android:textColor="@color/darkGray"
                     app:layout_constraintEnd_toEndOf="@+id/title_textView"
                     app:layout_constraintStart_toStartOf="@+id/title_textView"
@@ -94,11 +95,12 @@
 
                 <TextView
                     android:id="@+id/heart_textView"
+                    setNumberOfLikes="@{result.aggregateLikes}"
+                    android:text="100"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100"
-                    android:textColor="@color/red"
                     android:textAlignment="center"
+                    android:textColor="@color/red"
                     app:layout_constraintStart_toStartOf="@+id/description_textView"
                     app:layout_constraintTop_toBottomOf="@+id/heart_imageView" />
 
@@ -118,8 +120,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="100"
-                    android:textColor="@color/yellow"
+                    setNumberOfMinutes="@{result.readyInMinutes}"
                     android:textAlignment="center"
+                    android:textColor="@color/yellow"
                     app:layout_constraintStart_toEndOf="@+id/heart_textView"
                     app:layout_constraintTop_toBottomOf="@+id/clock_imageView" />
 
@@ -127,6 +130,7 @@
                     android:id="@+id/leaf_imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    isVegan="@{result.vegan}"
                     app:layout_constraintEnd_toEndOf="@+id/leaf_textView"
                     app:layout_constraintStart_toStartOf="@+id/leaf_textView"
                     app:layout_constraintTop_toTopOf="@+id/clock_imageView"
@@ -137,7 +141,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="100"
+                    android:text="Vegan"
+                    isVegan="@{result.vegan}"
                     android:textAlignment="center"
                     app:layout_constraintStart_toEndOf="@+id/clock_textView"
                     app:layout_constraintTop_toBottomOf="@+id/leaf_imageView" />
