@@ -9,6 +9,7 @@ class RecipesDiffUtil(
     private val oldList: List<Result>,
     private val newList: List<Result>
 ): DiffUtil.Callback() {
+
     override fun getOldListSize(): Int {
         return oldList.size
     }

@@ -53,7 +53,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
     }
 
     // Записывает все рецепты из модели(из апи) в переменную рецептов
-    // Сравнивает новый и старый спиок, обновляет только при наличии изменений
+    // Сравнивает новый и старый спиcок, обновляет только при наличии изменений
     fun setData(newData: FoodRecipe){
         val recipesDiffUtil = RecipesDiffUtil(recipes, newData.results)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
