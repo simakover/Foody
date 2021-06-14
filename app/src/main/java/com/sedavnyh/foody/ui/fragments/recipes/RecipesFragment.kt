@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sedavnyh.foody.MainViewModel
+import com.sedavnyh.foody.viewmodels.MainViewModel
 import com.sedavnyh.foody.adapters.RecipesAdapter
 import com.sedavnyh.foody.databinding.FragmentRecipesBinding
 import com.sedavnyh.foody.util.Constants.Companion.API_KEY
 import com.sedavnyh.foody.util.NetworkResult
+import com.sedavnyh.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recipes.view.*
-import kotlinx.android.synthetic.main.recipes_row_layout.*
 
 // Фрагмент со списком рецептов
 @AndroidEntryPoint
@@ -26,6 +26,16 @@ class RecipesFragment : Fragment() {
     private lateinit var mView: View
     private val mAdapter by lazy { RecipesAdapter() }
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var recipesViewModel: RecipesViewModel
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Привязка основной модели
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        recipesViewModel = ViewModelProvider(requireActivity()).get(RecipesViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +44,7 @@ class RecipesFragment : Fragment() {
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
         mView = binding.root
 
-        // Привязка основной модели
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
 
         setupRecyclerView()
         requestApiData()
@@ -61,7 +70,7 @@ class RecipesFragment : Fragment() {
 
     // Запрос даты из Апи
     private fun requestApiData(){
-        mainViewModel.getRecipes(applyQueries())
+        mainViewModel.getRecipes(recipesViewModel.applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
             when(response) {
                 is NetworkResult.Success -> {
@@ -77,18 +86,6 @@ class RecipesFragment : Fragment() {
                 }
             }
         })
-    }
-
-    // Параметры запроса
-    private fun applyQueries(): HashMap<String, String>{
-        val queries: HashMap<String, String> = HashMap()
-        queries["number"] = "50"
-        queries["apiKey"] = API_KEY
-        queries["type"] = "snack"
-        queries["diet"] = "vegan"
-        queries["addRecipeInformation"] = "true"
-        queries["fillIngredients"] = "true"
-        return queries
     }
 
     override fun onDestroyView() {
