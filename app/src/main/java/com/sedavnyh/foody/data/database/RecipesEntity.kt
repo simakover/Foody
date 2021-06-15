@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.sedavnyh.foody.models.FoodRecipe
 import com.sedavnyh.foody.util.Constants.Companion.RECIPES_TABLE
 
-// Сущность баззы данных
+// Сущность базы данных
 // Хранилище для последнего кешированного запроса, перезаписывается каждый раз
 @Entity(tableName = RECIPES_TABLE)
 class RecipesEntity(
