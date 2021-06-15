@@ -7,8 +7,9 @@ import javax.inject.Inject
 // инжект дата сурсов и видимость на уровне жизни активити, переживая смену конфигурации
 @ActivityRetainedScoped
 class Repository @Inject constructor(
-    remoteDataSource: RemoteDataSource
+    remoteDataSource: RemoteDataSource,
+    localDataSource: LocalDataSource
 ) {
-
     val remote = remoteDataSource
+    val local = localDataSource
 }
