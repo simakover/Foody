@@ -1,4 +1,4 @@
-package com.sedavnyh.foody
+package com.sedavnyh.foody.data.database
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

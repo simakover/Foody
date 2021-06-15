@@ -1,4 +1,4 @@
-package com.sedavnyh.foody
+package com.sedavnyh.foody.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
