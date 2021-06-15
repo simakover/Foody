@@ -15,6 +15,7 @@ import com.sedavnyh.foody.adapters.RecipesAdapter
 import com.sedavnyh.foody.databinding.FragmentRecipesBinding
 import com.sedavnyh.foody.util.Constants.Companion.API_KEY
 import com.sedavnyh.foody.util.NetworkResult
+import com.sedavnyh.foody.util.observeOnce
 import com.sedavnyh.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recipes.view.*
@@ -37,6 +38,7 @@ class RecipesFragment : Fragment() {
 
         // Привязка основной модели
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        // Привязка модели с очередью
         recipesViewModel = ViewModelProvider(requireActivity()).get(RecipesViewModel::class.java)
     }
 
@@ -53,12 +55,18 @@ class RecipesFragment : Fragment() {
         return mView
     }
 
+    // Связывание ресайклер вью с адаптером
+    private fun setupRecyclerView() {
+        mView.recyclerView.adapter = mAdapter
+        mView.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        showShimmerEffect()
+    }
+
     // Читаем из базы данных, и если данных нет - запрашиваем из апи
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observe(viewLifecycleOwner, {database ->
+            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, {database ->
                 if (database.isNotEmpty()){
-                    Log.d("RecipesFragment", "requestDatabase called")
                     mAdapter.setData(database[0].foodRecipe)
                     hideShimmerEffect()
                 } else {
@@ -68,25 +76,8 @@ class RecipesFragment : Fragment() {
         }
     }
 
-    // Шиммер еффект для фрагмента
-    private fun showShimmerEffect() {
-        mView.recyclerView.showShimmer()
-    }
-
-    private fun hideShimmerEffect() {
-        mView.recyclerView.hideShimmer()
-    }
-
-    // Связывание ресайклер вью с адаптером
-    private fun setupRecyclerView() {
-        mView.recyclerView.adapter = mAdapter
-        mView.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        showShimmerEffect()
-    }
-
     // Запрос даты из Апи
     private fun requestApiData(){
-        Log.d("RecipesFragment", "requestApiData called")
         mainViewModel.getRecipes(recipesViewModel.applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
             when(response) {
@@ -119,5 +110,14 @@ class RecipesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // Шиммер еффект для фрагмента
+    private fun showShimmerEffect() {
+        mView.recyclerView.showShimmer()
+    }
+
+    private fun hideShimmerEffect() {
+        mView.recyclerView.hideShimmer()
     }
 }
