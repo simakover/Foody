@@ -27,7 +27,6 @@ class RecipesFragment : Fragment() {
 
     private var _binding: FragmentRecipesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mView: View
     private val mAdapter by lazy { RecipesAdapter() }
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipesViewModel
@@ -47,29 +46,19 @@ class RecipesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
-        mView = binding.root
+        binding.lifecycleOwner = this
+        binding.mainViewModel = mainViewModel
 
         setupRecyclerView()
         readDatabase()
 
-        /*mainViewModel.readRecipes.observe(viewLifecycleOwner, {database ->
-            if (database.isEmpty()){
-                hideShimmerEffect()
-                binding.errorImageView.visibility = View.VISIBLE
-                binding.errorTextView.visibility = View.VISIBLE
-            } else {
-                binding.errorImageView.visibility = View.INVISIBLE
-                binding.errorTextView.visibility = View.INVISIBLE
-            }
-        })*/
-
-        return mView
+        return binding.root
     }
 
     // Связывание ресайклер вью с адаптером
     private fun setupRecyclerView() {
-        mView.recyclerView.adapter = mAdapter
-        mView.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = mAdapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         showShimmerEffect()
     }
 
@@ -94,6 +83,7 @@ class RecipesFragment : Fragment() {
             when(response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
+                    // загрузка данных из респонса в адаптер
                     response.data?.let { mAdapter.setData(it) }
                 }
                 is NetworkResult.Error -> {
@@ -108,6 +98,7 @@ class RecipesFragment : Fragment() {
         })
     }
 
+    //загрузка данных из кеша в адаптер
     private fun loadDataFromCache() {
         lifecycleScope.launch {
             mainViewModel.readRecipes.observe(viewLifecycleOwner, {database ->
@@ -118,17 +109,17 @@ class RecipesFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     // Шиммер еффект для фрагмента
     private fun showShimmerEffect() {
-        mView.recyclerView.showShimmer()
+        binding.recyclerView.showShimmer()
     }
 
     private fun hideShimmerEffect() {
-        mView.recyclerView.hideShimmer()
+        binding.recyclerView.hideShimmer()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
