@@ -52,6 +52,17 @@ class RecipesFragment : Fragment() {
         setupRecyclerView()
         readDatabase()
 
+        /*mainViewModel.readRecipes.observe(viewLifecycleOwner, {database ->
+            if (database.isEmpty()){
+                hideShimmerEffect()
+                binding.errorImageView.visibility = View.VISIBLE
+                binding.errorTextView.visibility = View.VISIBLE
+            } else {
+                binding.errorImageView.visibility = View.INVISIBLE
+                binding.errorTextView.visibility = View.INVISIBLE
+            }
+        })*/
+
         return mView
     }
 
