@@ -73,5 +73,5 @@ data class MealAndDietType(
     val selectedMealType: String,
     val selectedMealTypeId: Int,
     val selectedDietType: String,
-    val selectrdDietTypeId: Int
+    val selectedDietTypeId: Int
 )
