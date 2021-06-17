@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sedavnyh.foody.R
 import com.sedavnyh.foody.viewmodels.MainViewModel
@@ -32,6 +33,7 @@ class RecipesFragment : Fragment() {
     private val mAdapter by lazy { RecipesAdapter() }
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipesViewModel
+    private val args by navArgs<RecipesFragmentArgs>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +74,8 @@ class RecipesFragment : Fragment() {
     private fun readDatabase() {
         lifecycleScope.launch {
             mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, {database ->
-                if (database.isNotEmpty()){
+                //если есть записанные данные и очередь не менялась через нижнее меню - загружаем данные из базы
+                if (database.isNotEmpty() && args.backFromBottomSheet == false){
                     mAdapter.setData(database[0].foodRecipe)
                     hideShimmerEffect()
                 } else {
