@@ -17,14 +17,18 @@ import com.sedavnyh.foody.viewmodels.MainViewModel
 import com.sedavnyh.foody.adapters.RecipesAdapter
 import com.sedavnyh.foody.databinding.FragmentRecipesBinding
 import com.sedavnyh.foody.util.Constants.Companion.API_KEY
+import com.sedavnyh.foody.util.NetworkListener
 import com.sedavnyh.foody.util.NetworkResult
 import com.sedavnyh.foody.util.observeOnce
 import com.sedavnyh.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recipes.view.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 // Фрагмент со списком рецептов
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class RecipesFragment : Fragment() {
 
@@ -34,6 +38,8 @@ class RecipesFragment : Fragment() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipesViewModel
     private val args by navArgs<RecipesFragmentArgs>()
+
+    private lateinit var networkListener: NetworkListener
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,8 +62,23 @@ class RecipesFragment : Fragment() {
         setupRecyclerView()
         readDatabase()
 
+        //Проверка в корутине работает ли интернет
+        lifecycleScope.launch {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(requireContext())
+                .collect { status ->
+                    recipesViewModel.networkStatus = status
+                    recipesViewModel.showNetworkStatus()
+                }
+        }
+
+        // Переход на фрагмент с нижним меню
         binding.recipesFab.setOnClickListener {
-            findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+            if(recipesViewModel.networkStatus == true) {
+                findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+            } else {
+                recipesViewModel.showNetworkStatus()
+            }
         }
 
         return binding.root
