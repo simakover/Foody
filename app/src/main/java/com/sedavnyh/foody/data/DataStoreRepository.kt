@@ -6,6 +6,7 @@ import androidx.datastore.preferences.*
 import com.sedavnyh.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
 import com.sedavnyh.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
 import com.sedavnyh.foody.util.Constants.Companion.PREFERENCES_NAME
+import com.sedavnyh.foody.util.Constants.Companion.PREFERENCE_BACK_ONLINE
 import com.sedavnyh.foody.util.Constants.Companion.PREFERENCE_DIET_TYPE
 import com.sedavnyh.foody.util.Constants.Companion.PREFERENCE_DIET_TYPE_ID
 import com.sedavnyh.foody.util.Constants.Companion.PREFERENCE_MEAL_TYPE
@@ -29,6 +30,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         val selectedMealTypeId = preferencesKey<Int>(PREFERENCE_MEAL_TYPE_ID)
         val selectedDietType = preferencesKey<String>(PREFERENCE_DIET_TYPE)
         val selectedDietTypeId = preferencesKey<Int>(PREFERENCE_DIET_TYPE_ID)
+        val backOnline = preferencesKey<Boolean>(PREFERENCE_BACK_ONLINE)
     }
 
     // Хранилище
@@ -48,11 +50,11 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
 
     // Достать настройки из хранилища(или взять дефолтные) и отдать ввиде дата класса
     val readMealAndDietType: Flow<MealAndDietType> = dataStore.data
-        .catch { execption ->
-            if (execption is IOException) {
+        .catch { exception ->
+            if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
-                throw execption
+                throw exception
             }
         }
         .map { preferences ->
@@ -66,6 +68,26 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
                 selectedDietType,
                 selectedDietTypeId
             )
+        }
+
+    //Запись статуса онлайн в хранилище
+    suspend fun saveBackOnline(backOnline: Boolean){
+        dataStore.edit { preferences ->
+            preferences[PreferenceKeys.backOnline] = backOnline
+        }
+    }
+
+    val readBackOnline: Flow<Boolean> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            val backOnline = preferences[PreferenceKeys.backOnline] ?: false
+            backOnline
         }
 }
 

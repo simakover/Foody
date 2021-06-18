@@ -59,8 +59,11 @@ class RecipesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
 
+        // Обработка смены онлайн статуса
         setupRecyclerView()
-        readDatabase()
+        recipesViewModel.readBackOnline.observe(viewLifecycleOwner, {
+            recipesViewModel.backOnline = it
+        })
 
         //Проверка в корутине работает ли интернет
         lifecycleScope.launch {
@@ -69,6 +72,7 @@ class RecipesFragment : Fragment() {
                 .collect { status ->
                     recipesViewModel.networkStatus = status
                     recipesViewModel.showNetworkStatus()
+                    readDatabase()
                 }
         }
 
