@@ -15,4 +15,9 @@ interface FoodRecipesApi {
         @QueryMap queries: Map<String, String>
     ): Response<FoodRecipe>
 
+    // Поиск по конкретному слову в рецепте\наименовании
+    @GET("/recipes/complexSearch")
+    suspend fun searchRecipes(
+        @QueryMap searchQuery: Map<String, String>
+    ): Response<FoodRecipe>
 }
