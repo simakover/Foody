@@ -1,18 +1,39 @@
 package com.sedavnyh.foody.bindingadapters
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.navigation.findNavController
 import coil.load
 import com.sedavnyh.foody.R
+import com.sedavnyh.foody.models.Result
+import com.sedavnyh.foody.ui.fragments.recipes.RecipesFragment
+import com.sedavnyh.foody.ui.fragments.recipes.RecipesFragmentDirections
 
 // Байндинг адапетр для конкретного рецетпа\карточки
 class RecipesRowBinding {
 
     // объект для обращения к классу без создания екземпляров
     companion object{
+
+        // Адаптер для перехода на активити с деталями, прокидываем рецепт в аргументы
+        @BindingAdapter("onRecipeClickListener")
+        @JvmStatic
+        fun onRecipeClickListener(recipeRowLayout: ConstraintLayout, result: Result) {
+            recipeRowLayout.setOnClickListener {
+                try {
+                    val action =
+                        RecipesFragmentDirections.actionRecipesFragmentToDetailsActivity(result)
+                    recipeRowLayout.findNavController().navigate(action)
+                } catch (e: Exception) {
+                    Log.d("onRecipeClickListener", e.toString())
+                }
+            }
+        }
 
         // Создаем новый параметр для вью который устанавлиет текст вью
         // JvmStatic дает доступ из любого места
