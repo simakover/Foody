@@ -13,6 +13,7 @@ import com.sedavnyh.foody.R
 import com.sedavnyh.foody.models.Result
 import com.sedavnyh.foody.ui.fragments.recipes.RecipesFragment
 import com.sedavnyh.foody.ui.fragments.recipes.RecipesFragmentDirections
+import org.jsoup.Jsoup
 
 // Байндинг адапетр для конкретного рецетпа\карточки
 class RecipesRowBinding {
@@ -72,6 +73,16 @@ class RecipesRowBinding {
             imageView.load(imageUrl){
                 crossfade(600)
                 error(R.drawable.ic_error_placeholder)
+            }
+        }
+
+        // скрыть HTML теги
+        @BindingAdapter("parseHTML")
+        @JvmStatic
+        fun parseHTML(textView: TextView, description: String?) {
+            if ( description != null) {
+                val desc = Jsoup.parse(description).text()
+                textView.text = desc
             }
         }
     }
