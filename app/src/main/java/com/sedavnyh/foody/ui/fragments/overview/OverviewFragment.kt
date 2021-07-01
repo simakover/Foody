@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import coil.load
 import com.sedavnyh.foody.R
 import com.sedavnyh.foody.models.Result
+import com.sedavnyh.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 import kotlinx.android.synthetic.main.fragment_overview.view.*
 import org.jsoup.Jsoup
 
@@ -21,7 +22,7 @@ class OverviewFragment : Fragment() {
 
         // загрузка аргументов из бандла
         val args = arguments
-        val myBundle: Result? = args?.getParcelable("recipeBundle")
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
 
         // установка параметорв из бандла
         view.main_ImageView.load(myBundle?.image)
