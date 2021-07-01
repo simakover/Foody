@@ -4,10 +4,11 @@ import androidx.recyclerview.widget.DiffUtil
 import com.sedavnyh.foody.models.Result
 
 
-//Утилита сравнения списков рецептов - старого в памяти, и нового зафеченного
-class RecipesDiffUtil(
-    private val oldList: List<Result>,
-    private val newList: List<Result>
+//Утилита сравнения списков - старого в памяти, и нового зафеченного. Дженерик, тк списков два типа
+// Рецепты и ингредиенты
+class RecipesDiffUtil<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>
 ): DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
