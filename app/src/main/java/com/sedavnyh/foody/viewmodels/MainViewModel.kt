@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sedavnyh.foody.data.Repository
+import com.sedavnyh.foody.data.database.entities.FavoritesEntity
 import com.sedavnyh.foody.data.database.entities.RecipesEntity
 import com.sedavnyh.foody.models.FoodRecipe
 import com.sedavnyh.foody.util.NetworkResult
@@ -23,11 +24,27 @@ class MainViewModel @ViewModelInject constructor(
     /** ROOM **/
     // чтение из локальной базы записанной сущности
     val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readCachedRecipes().asLiveData()
+    val readFavoriteRecipes: LiveData<List<FavoritesEntity>> = repository.local.readFavoriteRecipes().asLiveData()
 
     // запись в базу сущностей
     private fun insertRecipes(recipesEntity: RecipesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
             repository.local.insertCachedRecipes(recipesEntity)
+        }
+
+    private fun insertFavoriteRecipe(favoritesEntity: FavoritesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertFavoriteRecipe(favoritesEntity)
+        }
+
+    private fun deleteFavoriteRecipe(favoritesEntity: FavoritesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.deleteFavoriteRecipe(favoritesEntity)
+        }
+
+    private fun deleteAllFavoriteRecipe() =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.deleteAllFavoriteRecipes()
         }
 
     /** RETROFIT **/
