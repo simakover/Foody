@@ -28,6 +28,9 @@ class DetailsActivity : AppCompatActivity() {
     private val args by navArgs<DetailsActivityArgs>()
     private val mainViewModel: MainViewModel by viewModels()
 
+    private var recipeSaved = false
+    private var savedRecipeId = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
@@ -70,11 +73,15 @@ class DetailsActivity : AppCompatActivity() {
         return true
     }
 
-    // закрыть активити через стрелку в баре
+    // Поведение элементов меню
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
-            R.id.save_to_favorite -> saveToFavorite(item)
+            R.id.save_to_favorite ->
+                if (!recipeSaved)
+                    saveToFavorite(item)
+                else
+                    deleteFromFavorites(item)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -89,6 +96,20 @@ class DetailsActivity : AppCompatActivity() {
         mainViewModel.insertFavoriteRecipe(favoritesEntity)
         changeMenuItemColor(item, true )
         showSnackBar("Recipe saved")
+        recipeSaved = true
+    }
+
+    // Удаление рецепта из избраного
+    private fun deleteFromFavorites(item: MenuItem) {
+         val favoritesEntity =
+             FavoritesEntity(
+                 savedRecipeId,
+                 args.result
+             )
+        mainViewModel.deleteFavoriteRecipe(favoritesEntity)
+        changeMenuItemColor(item, false)
+        showSnackBar("Removed from saved")
+        recipeSaved = false
     }
 
     // Проверка сохренен ли рецерт - для цвета и поведения звезды
@@ -98,12 +119,17 @@ class DetailsActivity : AppCompatActivity() {
                 for(savedRecipe in it) {
                     if (savedRecipe.result.id == args.result.id) {
                         changeMenuItemColor(item, true)
+                        savedRecipeId = savedRecipe.id
+                        recipeSaved = true
                         return@observe
                     }
                 }
                 changeMenuItemColor(item, false)
+                recipeSaved = false
             } catch (e: Exception) {
                 Log.d("DetailsActivity", e.message.toString())
+                changeMenuItemColor(item, false)
+                recipeSaved = false
             }
         })
     }
