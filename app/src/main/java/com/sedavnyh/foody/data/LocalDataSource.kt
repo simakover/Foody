@@ -1,7 +1,7 @@
 package com.sedavnyh.foody.data
 
 import com.sedavnyh.foody.data.database.RecipesDao
-import com.sedavnyh.foody.data.database.RecipesEntity
+import com.sedavnyh.foody.data.database.entities.RecipesEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
