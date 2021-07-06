@@ -22,12 +22,12 @@ class MainViewModel @ViewModelInject constructor(
 
     /** ROOM **/
     // чтение из локальной базы записанной сущности
-    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase().asLiveData()
+    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readCachedRecipes().asLiveData()
 
     // запись в базу сущностей
     private fun insertRecipes(recipesEntity: RecipesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertRecipes(recipesEntity)
+            repository.local.insertCachedRecipes(recipesEntity)
         }
 
     /** RETROFIT **/
