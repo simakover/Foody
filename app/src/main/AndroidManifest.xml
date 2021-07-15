@@ -15,10 +15,10 @@
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.DetailsActivity"
+        <activity android:name=".ui.activities.DetailsActivity"
             android:theme="@style/DetailsActivityStyle"
             android:label="Details"/>
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

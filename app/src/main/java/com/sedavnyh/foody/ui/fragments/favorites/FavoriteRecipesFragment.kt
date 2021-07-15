@@ -15,6 +15,7 @@ import com.sedavnyh.foody.databinding.FragmentIngredientsBinding
 import com.sedavnyh.foody.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+// фрагмент с избранными рецептами
 @AndroidEntryPoint
 class FavoriteRecipesFragment : Fragment() {
 
@@ -27,8 +28,12 @@ class FavoriteRecipesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Привязка лейаута и прокидывание модели\адаптера в него
         _binding = FragmentFavoriteRecipesBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mainViewModel = mainViewModel
 
+        // Прокидывание данных из модели в адаптер
         mainViewModel.readFavoriteRecipes.observe(viewLifecycleOwner, {
             mAdapter.setData(it)
         })
@@ -43,4 +48,8 @@ class FavoriteRecipesFragment : Fragment() {
         binding.favoriteRecipesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

@@ -1,4 +1,4 @@
-package com.sedavnyh.foody.ui
+package com.sedavnyh.foody.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
