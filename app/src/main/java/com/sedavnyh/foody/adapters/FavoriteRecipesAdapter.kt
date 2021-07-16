@@ -1,6 +1,7 @@
 package com.sedavnyh.foody.adapters
 
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -73,8 +74,10 @@ class FavoriteRecipesAdapter(
         diffUtilResult.dispatchUpdatesTo(this)
     }
 
+    // Переход в режим выбора по лонг клику
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         mode?.menuInflater?.inflate(R.menu.favorites_contextual_menu, menu)
+        applyStatusBarColor(R.color.contextualStatusBarColor)
         return true
     }
 
@@ -87,6 +90,11 @@ class FavoriteRecipesAdapter(
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
+        applyStatusBarColor(R.color.statusBarColor)
+    }
 
+    // Смена цвета статус бара
+    private fun applyStatusBarColor(color: Int) {
+        requireActivity.window.statusBarColor = ContextCompat.getColor(requireActivity, color)
     }
 }
