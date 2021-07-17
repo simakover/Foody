@@ -6,17 +6,20 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.sedavnyh.foody.R
 import com.sedavnyh.foody.data.database.entities.FavoritesEntity
 import com.sedavnyh.foody.databinding.FavoriteRecipesRowLayoutBinding
 import com.sedavnyh.foody.ui.fragments.favorites.FavoriteRecipesFragmentDirections
 import com.sedavnyh.foody.util.RecipesDiffUtil
+import com.sedavnyh.foody.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.favorite_recipes_row_layout.view.*
 
 // Байндинг адаптер для списка избраных рецептов рецептов. Создаем адаптер, как расширение адаптера Ресейклер вью
 // Прокидываем кастомный вьюхолдер, привязывает данные
 class FavoriteRecipesAdapter(
-    private val requireActivity: FragmentActivity
+    private val requireActivity: FragmentActivity,
+    private val mainViewModel: MainViewModel
 ) : RecyclerView.Adapter<FavoriteRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
 
     private var favoriteRecipes = emptyList<FavoritesEntity>()
@@ -26,6 +29,7 @@ class FavoriteRecipesAdapter(
     private var selectedRecipes = arrayListOf<FavoritesEntity>()
 
     private lateinit var mActionMode: ActionMode
+    private lateinit var rootView: View
 
     class MyViewHolder(private val binding: FavoriteRecipesRowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -51,6 +55,7 @@ class FavoriteRecipesAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        rootView = holder.itemView.rootView
         val currentRecipe = favoriteRecipes[position]
         holder.bind(currentRecipe)
         myViewHolders.add(holder)
@@ -72,11 +77,8 @@ class FavoriteRecipesAdapter(
                 multiSelection = true
                 requireActivity.startActionMode(this)
                 applySelection(holder, currentRecipe)
-                true
-            } else {
-                multiSelection = false
-                false
             }
+            true
         }
     }
 
@@ -140,6 +142,18 @@ class FavoriteRecipesAdapter(
     }
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.delete_favorite_recipe_menu -> {
+                selectedRecipes.forEach{
+                    mainViewModel.deleteFavoriteRecipe(it)
+
+                }
+                showSnackBar("${selectedRecipes.size} recipe/s removed")
+                multiSelection = false
+                selectedRecipes.clear()
+                mode?.finish()
+            }
+        }
         return true
     }
 
@@ -150,6 +164,10 @@ class FavoriteRecipesAdapter(
         myViewHolders.forEach {
             changeRecipeStyle(it, R.color.cardBackgroundColor, R.color.strokeColor)
         }
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).setAction("OK"){}.show()
     }
 
 
