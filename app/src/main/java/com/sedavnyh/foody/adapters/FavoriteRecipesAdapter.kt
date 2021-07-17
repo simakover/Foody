@@ -86,6 +86,7 @@ class FavoriteRecipesAdapter(
         return favoriteRecipes.size
     }
 
+    // добавление елементов в список
     fun setData(newFavoriteRecipes: List<FavoritesEntity>) {
         val favoriteRecipesDiffUtil = RecipesDiffUtil(favoriteRecipes, newFavoriteRecipes)
         val diffUtilResult = DiffUtil.calculateDiff(favoriteRecipesDiffUtil)
@@ -93,6 +94,7 @@ class FavoriteRecipesAdapter(
         diffUtilResult.dispatchUpdatesTo(this)
     }
 
+    // наполнение массива выбранных елементов по клику, визуальное оформление
     private fun applySelection(holder: MyViewHolder, currentRecipe: FavoritesEntity) {
         if (selectedRecipes.contains(currentRecipe)) {
             selectedRecipes.remove(currentRecipe)
@@ -105,6 +107,7 @@ class FavoriteRecipesAdapter(
         }
     }
 
+    // Смена цвета и обводки выбранной карточки
     private fun changeRecipeStyle(holder: MyViewHolder, backgroundColor: Int, strokeColor: Int) {
         holder.itemView.favoriteRecipesRowLayout.setBackgroundColor(
             ContextCompat.getColor(
@@ -141,6 +144,7 @@ class FavoriteRecipesAdapter(
         return true
     }
 
+    // Поведение для меню в actionMode
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.delete_favorite_recipe_menu -> {
@@ -157,6 +161,7 @@ class FavoriteRecipesAdapter(
         return true
     }
 
+    // Поведение при уничтожении actionMode
     override fun onDestroyActionMode(mode: ActionMode?) {
         multiSelection = false
         selectedRecipes.clear()
@@ -166,10 +171,12 @@ class FavoriteRecipesAdapter(
         }
     }
 
+    // Снекбар
     private fun showSnackBar(message: String) {
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).setAction("OK"){}.show()
     }
 
+    // вызов уничтожения actionMode из других фрагментов
     fun clearContextualActionMode() {
         if(this::mActionMode.isInitialized) {
             mActionMode.finish()

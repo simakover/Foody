@@ -43,11 +43,13 @@ class FavoriteRecipesFragment : Fragment() {
         return binding.root
     }
 
+    // Связка адаптера и ресейклер вью
     private fun setupRecyclerView() {
         binding.favoriteRecipesRecyclerView.adapter = mAdapter
         binding.favoriteRecipesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
+    // Действия на уничтожении фрагмента
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
